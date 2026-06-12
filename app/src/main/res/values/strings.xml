@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">Score Tarot</string>
+    <string name="newGameText">Nouvelle Partie</string>
+    <string name="loadGameText">Load\nGame</string>
+    <string name="settingsText">Settings</string>
+</resources>
