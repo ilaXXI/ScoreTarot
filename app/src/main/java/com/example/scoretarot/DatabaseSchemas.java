@@ -1,49 +1,47 @@
 package com.example.scoretarot;
-import android.content.Context;
-import android.database.sqlite.*;
+
 import android.provider.BaseColumns;
 
-public class DatabaseSchemas {
+public final class DatabaseSchemas {
     private DatabaseSchemas() {}
 
-    public static class Games implements BaseColumns {
-        public static final String TABLE_NAME = "game";
-        public static final String COLUMN_NAME_PLAYER_COUNT = "player_count";
-        public static final String COLUMN_NAME_DATE = "date";
-        public static final String COLUMN_NAME_ROUND_COUNT = "round_count";
+    public static final class GameEntry implements BaseColumns {
+        public static final String TABLE_NAME = "games";
+        public static final String COLUMN_CREATED_AT = "created_at";
+        public static final String COLUMN_PLAYER_COUNT = "player_count";
+        public static final String COLUMN_ROUND_COUNT = "round_count";
+        public static final String COLUMN_LATITUDE = "latitude";
+        public static final String COLUMN_LONGITUDE = "longitude";
+        public static final String COLUMN_ADDRESS = "address";
     }
 
-    private static final String SQL_CREATE_GAME_TABLE =
-            "CREATE TABLE " + Games.TABLE_NAME + " (" +
-            Games._ID + " INTEGER PRIMARY KEY," +
-            Games.COLUMN_NAME_DATE + " INTEGER," +
-            Games.COLUMN_NAME_PLAYER_COUNT + " INTEGER," +
-            Games.COLUMN_NAME_ROUND_COUNT + " INTEGER)";
-
-    private static final String SQL_DELETE_GAME_TABLE =
-            "DROP TABLE IF EXISTS " + Games.TABLE_NAME;
-
-    public class GamesDbHelper extends SQLiteOpenHelper {
-
-        public static final int DATABASE_VERSION = 1;
-        public static final String DATABASE_NAME = "scoretarot.db";
-
-        public GamesDbHelper(Context context)
-        {
-            super(context, DATABASE_NAME, null, DATABASE_VERSION);
-        }
-
-        @Override
-        public void onCreate(SQLiteDatabase db) {
-            db.execSQL(SQL_CREATE_GAME_TABLE);
-        }
-
-        @Override
-        public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-            db.execSQL(SQL_DELETE_GAME_TABLE);
-            onCreate(db);
-        }
+    public static final class PlayerEntry implements BaseColumns {
+        public static final String TABLE_NAME = "players";
+        public static final String COLUMN_GAME_ID = "game_id";
+        public static final String COLUMN_NAME = "name";
+        public static final String COLUMN_PHOTO_PATH = "photo_path";
     }
 
-    GamesDbHelper dbHelper = new GamesDbHelper(getContext());
+    public static final String SQL_CREATE_GAME_TABLE =
+            "CREATE TABLE " + GameEntry.TABLE_NAME + " (" +
+                    GameEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    GameEntry.COLUMN_CREATED_AT + " INTEGER NOT NULL, " +
+                    GameEntry.COLUMN_PLAYER_COUNT + " INTEGER NOT NULL, " +
+                    GameEntry.COLUMN_ROUND_COUNT + " INTEGER NOT NULL, " +
+                    GameEntry.COLUMN_LATITUDE + " REAL, " +
+                    GameEntry.COLUMN_LONGITUDE + " REAL, " +
+                    GameEntry.COLUMN_ADDRESS + " TEXT)";
+
+    public static final String SQL_CREATE_PLAYER_TABLE =
+            "CREATE TABLE " + PlayerEntry.TABLE_NAME + " (" +
+                    PlayerEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    PlayerEntry.COLUMN_GAME_ID + " INTEGER NOT NULL, " +
+                    PlayerEntry.COLUMN_NAME + " TEXT NOT NULL, " +
+                    PlayerEntry.COLUMN_PHOTO_PATH + " TEXT)";
+
+    public static final String SQL_DELETE_GAME_TABLE =
+            "DROP TABLE IF EXISTS " + GameEntry.TABLE_NAME;
+
+    public static final String SQL_DELETE_PLAYER_TABLE =
+            "DROP TABLE IF EXISTS " + PlayerEntry.TABLE_NAME;
 }

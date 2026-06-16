@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".NewGameActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/new_game_title"
+            android:textAppearance="@style/TextAppearance.Material3.HeadlineMedium" />
+
+        <EditText
+            android:id="@+id/input_player_count"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:hint="@string/new_game_players_hint"
+            android:inputType="number" />
+
+        <EditText
+            android:id="@+id/input_round_count"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:hint="@string/new_game_rounds_hint"
+            android:inputType="number" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/new_game_location_title"
+            android:textAppearance="@style/TextAppearance.Material3.TitleLarge" />
+
+        <TextView
+            android:id="@+id/text_location"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:minHeight="72dp"
+            android:text="@string/new_game_no_location" />
+
+        <Button
+            android:id="@+id/button_use_location"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="@string/new_game_use_location" />
+
+        <Button
+            android:id="@+id/button_create_game"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:text="@string/new_game_create" />
+
+        <Button
+            android:id="@+id/button_cancel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/new_game_cancel" />
+    </LinearLayout>
+</ScrollView>

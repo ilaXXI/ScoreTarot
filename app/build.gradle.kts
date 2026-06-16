@@ -4,6 +4,7 @@ plugins {
 
 android {
     namespace = "com.example.scoretarot"
+    buildToolsVersion = "37.0.0"
     compileSdk {
         version = release(36) {
             minorApiLevel = 1
@@ -40,6 +41,9 @@ dependencies {
     implementation(libs.material)
     implementation(libs.activity)
     implementation(libs.constraintlayout)
+    implementation("androidx.drawerlayout:drawerlayout:1.2.0")
+    implementation("com.google.android.gms:play-services-location:21.3.0")
+    implementation("org.osmdroid:osmdroid-android:6.1.18")
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)

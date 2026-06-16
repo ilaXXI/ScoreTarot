@@ -1,24 +1,118 @@
 package com.example.scoretarot;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.core.view.GravityCompat;
+
+import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.navigation.NavigationView;
+
+import androidx.drawerlayout.widget.DrawerLayout;
 
 public class MainActivity extends AppCompatActivity {
+
+    private GameDatabase gameDatabase;
+    private TextView gamesCountText;
+    private TextView playersCountText;
+    private DrawerLayout drawerLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
+
+        gameDatabase = GameDatabase.getInstance(this);
+        drawerLayout = findViewById(R.id.drawer_layout);
+        MaterialToolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this,
+                drawerLayout,
+                toolbar,
+                R.string.drawer_open,
+                R.string.drawer_close
+        );
+        drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView = findViewById(R.id.navigation_view);
+        navigationView.setNavigationItemSelectedListener(item -> {
+            handleNavigation(item.getItemId());
+            drawerLayout.closeDrawer(GravityCompat.START);
+            return true;
         });
+
+        gamesCountText = findViewById(R.id.home_games_count);
+        playersCountText = findViewById(R.id.home_players_count);
+
+        Button newGameButton = findViewById(R.id.button_new_game);
+        Button gamesButton = findViewById(R.id.button_games);
+        Button liveLocationButton = findViewById(R.id.button_live_location);
+        Button playersButton = findViewById(R.id.button_players);
+        Button settingsButton = findViewById(R.id.button_settings);
+        Button syncButton = findViewById(R.id.button_sync);
+
+        newGameButton.setOnClickListener(v -> startActivity(new Intent(this, NewGameActivity.class)));
+        gamesButton.setOnClickListener(v -> startActivity(new Intent(this, GamesActivity.class)));
+        liveLocationButton.setOnClickListener(v -> startActivity(new Intent(this, LiveLocationActivity.class)));
+        playersButton.setOnClickListener(v -> openLatestGamePlayers());
+        settingsButton.setOnClickListener(v -> startActivity(new Intent(this, SettingsActivity.class)));
+        syncButton.setOnClickListener(v -> Toast.makeText(this, ExternalDatabaseStub.sync(this), Toast.LENGTH_LONG).show());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        refreshStats();
+    }
+
+    private void refreshStats() {
+        gamesCountText.setText(getString(R.string.home_games_count, gameDatabase.getGameCount()));
+        playersCountText.setText(getString(R.string.home_players_count, gameDatabase.getPlayerCount()));
+    }
+
+    private void handleNavigation(int itemId) {
+        if (itemId == R.id.nav_home) {
+            return;
+        }
+        if (itemId == R.id.nav_new_game) {
+            startActivity(new Intent(this, NewGameActivity.class));
+            return;
+        }
+        if (itemId == R.id.nav_games) {
+            startActivity(new Intent(this, GamesActivity.class));
+            return;
+        }
+        if (itemId == R.id.nav_live_location) {
+            startActivity(new Intent(this, LiveLocationActivity.class));
+            return;
+        }
+        if (itemId == R.id.nav_players) {
+            openLatestGamePlayers();
+            return;
+        }
+        if (itemId == R.id.nav_settings) {
+            startActivity(new Intent(this, SettingsActivity.class));
+            return;
+        }
+        if (itemId == R.id.nav_sync) {
+            Toast.makeText(this, ExternalDatabaseStub.sync(this), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void openLatestGamePlayers() {
+        GameDatabase.GameRecord latestGame = gameDatabase.getLatestGame();
+        if (latestGame == null) {
+            Toast.makeText(this, R.string.games_empty, Toast.LENGTH_SHORT).show();
+            return;
+        }
+        startActivity(PlayersActivity.newIntent(this, latestGame.id));
     }
 }

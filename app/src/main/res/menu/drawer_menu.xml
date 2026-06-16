@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_home"
+        android:title="@string/nav_home" />
+    <item
+        android:id="@+id/nav_new_game"
+        android:title="@string/nav_new_game" />
+    <item
+        android:id="@+id/nav_games"
+        android:title="@string/nav_games" />
+    <item
+        android:id="@+id/nav_live_location"
+        android:title="@string/nav_live_location" />
+    <item
+        android:id="@+id/nav_players"
+        android:title="@string/nav_players" />
+    <item
+        android:id="@+id/nav_settings"
+        android:title="@string/nav_settings" />
+    <item
+        android:id="@+id/nav_sync"
+        android:title="@string/nav_sync" />
+</menu>

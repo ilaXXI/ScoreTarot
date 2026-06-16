@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".PlayersActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/players_title"
+            android:textAppearance="@style/TextAppearance.Material3.HeadlineMedium" />
+
+        <TextView
+            android:id="@+id/text_game_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp" />
+
+        <TextView
+            android:id="@+id/text_selected_player"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/players_empty" />
+
+        <EditText
+            android:id="@+id/input_player_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:hint="@string/players_name_hint" />
+
+        <Button
+            android:id="@+id/button_add_player"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/players_add" />
+
+        <Button
+            android:id="@+id/button_take_photo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/players_take_photo" />
+
+        <ImageView
+            android:id="@+id/image_player_photo"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginTop="12dp"
+            android:scaleType="centerCrop" />
+
+        <ListView
+            android:id="@+id/list_players"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_marginTop="12dp" />
+    </LinearLayout>
+</ScrollView>
