@@ -1,7 +1,6 @@
 package com.example.scoretarot;
 
 import android.Manifest;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -17,6 +16,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 
@@ -26,8 +26,8 @@ import java.util.Locale;
 
 public class NewGameActivity extends AppCompatActivity {
 
+    private EditText nameInput;
     private EditText playerCountInput;
-    private EditText roundCountInput;
     private TextView locationText;
     private Double currentLatitude;
     private Double currentLongitude;
@@ -41,9 +41,16 @@ public class NewGameActivity extends AppCompatActivity {
         setContentView(R.layout.activity_new_game);
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+        nameInput = findViewById(R.id.input_game_name);
         playerCountInput = findViewById(R.id.input_player_count);
-        roundCountInput = findViewById(R.id.input_round_count);
         locationText = findViewById(R.id.text_location);
+
+        MaterialToolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+        toolbar.setNavigationOnClickListener(v -> finish());
 
         Button useLocationButton = findViewById(R.id.button_use_location);
         Button createButton = findViewById(R.id.button_create_game);
@@ -76,15 +83,17 @@ public class NewGameActivity extends AppCompatActivity {
 
     private void loadCurrentLocation() {
         locationText.setText(R.string.location_loading);
-        fusedLocationProviderClient.getLastLocation().addOnSuccessListener(location -> {
-            if (location == null) {
-                Toast.makeText(this, R.string.location_loading, Toast.LENGTH_SHORT).show();
-                return;
-            }
-            currentLatitude = location.getLatitude();
-            currentLongitude = location.getLongitude();
-            resolveAddress(location);
-        });
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            fusedLocationProviderClient.getLastLocation().addOnSuccessListener(location -> {
+                if (location == null) {
+                    Toast.makeText(this, R.string.location_loading, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                currentLatitude = location.getLatitude();
+                currentLongitude = location.getLongitude();
+                resolveAddress(location);
+            });
+        }
     }
 
     private void resolveAddress(Location location) {
@@ -115,16 +124,17 @@ public class NewGameActivity extends AppCompatActivity {
 
     private void createGame() {
         int playerCount;
-        int roundCount;
+        String gameName = nameInput.getText().toString().trim();
+        if (gameName.isEmpty()) gameName = null;
+        
         try {
             playerCount = Integer.parseInt(playerCountInput.getText().toString().trim());
-            roundCount = Integer.parseInt(roundCountInput.getText().toString().trim());
         } catch (NumberFormatException exception) {
             Toast.makeText(this, R.string.new_game_invalid_input, Toast.LENGTH_SHORT).show();
             return;
         }
 
-        long gameId = GameDatabase.getInstance(this).insertGame(playerCount, roundCount, currentLatitude, currentLongitude, currentAddress);
+        long gameId = GameDatabase.getInstance(this).insertGame(gameName, playerCount, 0, currentLatitude, currentLongitude, currentAddress);
         if (gameId == -1) {
             Toast.makeText(this, R.string.new_game_invalid_input, Toast.LENGTH_SHORT).show();
             return;

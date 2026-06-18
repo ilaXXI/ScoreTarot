@@ -17,10 +17,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ScoreTarot">
         <activity android:name=".SettingsActivity" android:exported="false" />
-        <activity android:name=".GameMapActivity" android:exported="false" />
+        <activity android:name=".ManagePlayersActivity" android:exported="false" />
+        <activity android:name=".ScoreEntryActivity" android:exported="false" />
+        <activity android:name=".GameDetailActivity" android:exported="false" />
+        <activity android:name=".GlobalMapActivity" android:exported="false" />
         <activity android:name=".PlayersActivity" android:exported="false" />
         <activity android:name=".GamesActivity" android:exported="false" />
-        <activity android:name=".LiveLocationActivity" android:exported="false" />
         <activity android:name=".NewGameActivity" android:exported="false" />
         <activity
             android:name=".MainActivity"

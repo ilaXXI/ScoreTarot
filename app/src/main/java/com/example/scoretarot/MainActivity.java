@@ -54,17 +54,13 @@ public class MainActivity extends AppCompatActivity {
 
         Button newGameButton = findViewById(R.id.button_new_game);
         Button gamesButton = findViewById(R.id.button_games);
-        Button liveLocationButton = findViewById(R.id.button_live_location);
         Button playersButton = findViewById(R.id.button_players);
         Button settingsButton = findViewById(R.id.button_settings);
-        Button syncButton = findViewById(R.id.button_sync);
 
         newGameButton.setOnClickListener(v -> startActivity(new Intent(this, NewGameActivity.class)));
         gamesButton.setOnClickListener(v -> startActivity(new Intent(this, GamesActivity.class)));
-        liveLocationButton.setOnClickListener(v -> startActivity(new Intent(this, LiveLocationActivity.class)));
-        playersButton.setOnClickListener(v -> openLatestGamePlayers());
+        playersButton.setOnClickListener(v -> startActivity(new Intent(this, ManagePlayersActivity.class)));
         settingsButton.setOnClickListener(v -> startActivity(new Intent(this, SettingsActivity.class)));
-        syncButton.setOnClickListener(v -> Toast.makeText(this, ExternalDatabaseStub.sync(this), Toast.LENGTH_LONG).show());
     }
 
     @Override
@@ -90,29 +86,13 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(this, GamesActivity.class));
             return;
         }
-        if (itemId == R.id.nav_live_location) {
-            startActivity(new Intent(this, LiveLocationActivity.class));
-            return;
-        }
         if (itemId == R.id.nav_players) {
-            openLatestGamePlayers();
+            startActivity(new Intent(this, ManagePlayersActivity.class));
             return;
         }
         if (itemId == R.id.nav_settings) {
             startActivity(new Intent(this, SettingsActivity.class));
-            return;
-        }
-        if (itemId == R.id.nav_sync) {
-            Toast.makeText(this, ExternalDatabaseStub.sync(this), Toast.LENGTH_LONG).show();
         }
     }
 
-    private void openLatestGamePlayers() {
-        GameDatabase.GameRecord latestGame = gameDatabase.getLatestGame();
-        if (latestGame == null) {
-            Toast.makeText(this, R.string.games_empty, Toast.LENGTH_SHORT).show();
-            return;
-        }
-        startActivity(PlayersActivity.newIntent(this, latestGame.id));
-    }
 }

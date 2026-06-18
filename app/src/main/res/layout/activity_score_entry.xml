@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:title="Nouvelle Manche" />
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Qui a pris ?"
+                android:textAppearance="@style/TextAppearance.Material3.TitleMedium" />
+            <Spinner
+                android:id="@+id/spinner_taker"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp" />
+
+            <TextView
+                android:id="@+id/label_partner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Appelé (pour 5 joueurs)"
+                android:visibility="gone" />
+            <Spinner
+                android:id="@+id/spinner_partner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:visibility="gone" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Contrat" />
+            <Spinner
+                android:id="@+id/spinner_contract"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Nombre de bouts" />
+            <Spinner
+                android:id="@+id/spinner_bouts"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Bonus" />
+
+            <CheckBox android:id="@+id/cb_petit_bout_won" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Petit au bout (Gagné)" />
+            <CheckBox android:id="@+id/cb_petit_bout_lost" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Petit au bout (Perdu)" />
+            <CheckBox android:id="@+id/cb_poignee_simple" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Poignée Simple" />
+            <CheckBox android:id="@+id/cb_poignee_double" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Double Poignée" />
+            <CheckBox android:id="@+id/cb_poignee_triple" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Triple Poignée" />
+            <CheckBox android:id="@+id/cb_chelem_won" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Chelem réalisé" />
+            <CheckBox android:id="@+id/cb_chelem_announced" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Chelem annoncé" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:hint="Points faits par le preneur">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/input_points"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/button_save_round"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="Valider la manche" />
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

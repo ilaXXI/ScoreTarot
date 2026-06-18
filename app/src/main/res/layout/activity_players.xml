@@ -1,67 +1,141 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
     tools:context=".PlayersActivity">
+
+    <TextView
+        android:id="@+id/text_players_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/players_title"
+        android:textAppearance="@style/TextAppearance.Material3.HeadlineMedium"
+        android:textColor="?attr/colorPrimary" />
+
+    <TextView
+        android:id="@+id/text_game_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:textAppearance="@style/TextAppearance.Material3.BodyMedium" />
+
+    <com.google.android.material.divider.MaterialDivider
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="12dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="20dp">
+        android:orientation="horizontal">
 
-        <TextView
-            android:layout_width="match_parent"
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/players_title"
-            android:textAppearance="@style/TextAppearance.Material3.HeadlineMedium" />
+            android:layout_weight="1"
+            android:hint="@string/players_name_hint">
 
-        <TextView
-            android:id="@+id/text_game_info"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp" />
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/input_player_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <TextView
-            android:id="@+id/text_selected_player"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="@string/players_empty" />
-
-        <EditText
-            android:id="@+id/input_player_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:hint="@string/players_name_hint" />
-
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/button_add_player"
-            android:layout_width="match_parent"
+            style="@style/Widget.Material3.Button.TonalButton"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="8dp"
             android:text="@string/players_add" />
+    </LinearLayout>
 
-        <Button
-            android:id="@+id/button_take_photo"
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/button_pick_existing"
+        style="@style/Widget.Material3.Button.OutlinedButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/players_pick_existing"
+        app:icon="@android:drawable/ic_menu_search" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/card_selection"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        app:cardBackgroundColor="?attr/colorSurfaceVariant"
+        app:cardCornerRadius="12dp"
+        app:strokeWidth="0dp">
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="@string/players_take_photo" />
+            android:orientation="horizontal"
+            android:padding="12dp">
 
-        <ImageView
-            android:id="@+id/image_player_photo"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_marginTop="12dp"
-            android:scaleType="centerCrop" />
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/image_player_photo"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:scaleType="centerCrop"
+                android:background="?attr/colorSurface" />
 
-        <ListView
-            android:id="@+id/list_players"
-            android:layout_width="match_parent"
-            android:layout_height="300dp"
-            android:layout_marginTop="12dp" />
-    </LinearLayout>
-</ScrollView>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="12dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/text_selected_player"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/players_empty"
+                    android:textAppearance="@style/TextAppearance.Material3.TitleMedium" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/button_take_photo"
+                    style="@style/Widget.Material3.Button.TextButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/players_take_photo"
+                    app:icon="@android:drawable/ic_menu_camera" />
+            </LinearLayout>
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/players_list_label"
+        android:textAppearance="@style/TextAppearance.Material3.LabelLarge" />
+
+    <ListView
+        android:id="@+id/list_players"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginTop="4dp"
+        android:divider="@null"
+        android:dividerHeight="4dp" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/button_start_game"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:padding="12dp"
+        android:text="@string/players_start_game"
+        android:visibility="gone" />
+
+</LinearLayout>

@@ -7,6 +7,7 @@ public final class DatabaseSchemas {
 
     public static final class GameEntry implements BaseColumns {
         public static final String TABLE_NAME = "games";
+        public static final String COLUMN_NAME = "name";
         public static final String COLUMN_CREATED_AT = "created_at";
         public static final String COLUMN_PLAYER_COUNT = "player_count";
         public static final String COLUMN_ROUND_COUNT = "round_count";
@@ -17,14 +18,20 @@ public final class DatabaseSchemas {
 
     public static final class PlayerEntry implements BaseColumns {
         public static final String TABLE_NAME = "players";
-        public static final String COLUMN_GAME_ID = "game_id";
         public static final String COLUMN_NAME = "name";
         public static final String COLUMN_PHOTO_PATH = "photo_path";
+    }
+
+    public static final class GamePlayerEntry implements BaseColumns {
+        public static final String TABLE_NAME = "game_players";
+        public static final String COLUMN_GAME_ID = "game_id";
+        public static final String COLUMN_PLAYER_ID = "player_id";
     }
 
     public static final String SQL_CREATE_GAME_TABLE =
             "CREATE TABLE " + GameEntry.TABLE_NAME + " (" +
                     GameEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    GameEntry.COLUMN_NAME + " TEXT, " +
                     GameEntry.COLUMN_CREATED_AT + " INTEGER NOT NULL, " +
                     GameEntry.COLUMN_PLAYER_COUNT + " INTEGER NOT NULL, " +
                     GameEntry.COLUMN_ROUND_COUNT + " INTEGER NOT NULL, " +
@@ -35,13 +42,23 @@ public final class DatabaseSchemas {
     public static final String SQL_CREATE_PLAYER_TABLE =
             "CREATE TABLE " + PlayerEntry.TABLE_NAME + " (" +
                     PlayerEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    PlayerEntry.COLUMN_GAME_ID + " INTEGER NOT NULL, " +
                     PlayerEntry.COLUMN_NAME + " TEXT NOT NULL, " +
                     PlayerEntry.COLUMN_PHOTO_PATH + " TEXT)";
+
+    public static final String SQL_CREATE_GAME_PLAYER_TABLE =
+            "CREATE TABLE " + GamePlayerEntry.TABLE_NAME + " (" +
+                    GamePlayerEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    GamePlayerEntry.COLUMN_GAME_ID + " INTEGER NOT NULL, " +
+                    GamePlayerEntry.COLUMN_PLAYER_ID + " INTEGER NOT NULL, " +
+                    "FOREIGN KEY(" + GamePlayerEntry.COLUMN_GAME_ID + ") REFERENCES " + GameEntry.TABLE_NAME + "(" + GameEntry._ID + "), " +
+                    "FOREIGN KEY(" + GamePlayerEntry.COLUMN_PLAYER_ID + ") REFERENCES " + PlayerEntry.TABLE_NAME + "(" + PlayerEntry._ID + "))";
 
     public static final String SQL_DELETE_GAME_TABLE =
             "DROP TABLE IF EXISTS " + GameEntry.TABLE_NAME;
 
     public static final String SQL_DELETE_PLAYER_TABLE =
             "DROP TABLE IF EXISTS " + PlayerEntry.TABLE_NAME;
+
+    public static final String SQL_DELETE_GAME_PLAYER_TABLE =
+            "DROP TABLE IF EXISTS " + GamePlayerEntry.TABLE_NAME;
 }
