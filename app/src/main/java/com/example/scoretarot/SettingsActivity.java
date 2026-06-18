@@ -10,6 +10,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.appbar.MaterialToolbar;
 
+import java.util.Locale;
+
 public class SettingsActivity extends AppCompatActivity {
 
     @Override
@@ -25,9 +27,12 @@ public class SettingsActivity extends AppCompatActivity {
         TextView infoText = findViewById(R.id.text_settings_info);
         infoText.setText(R.string.settings_about);
 
+        Button langButton = findViewById(R.id.button_switch_lang);
+        langButton.setOnClickListener(v -> showLanguageDialog());
+
         Button syncButton = findViewById(R.id.button_test_sync);
         syncButton.setOnClickListener(v -> {
-            String msg = ExternalDatabaseStub.sync(this);
+            String msg = ExternalDatabaseManager.sync(this);
             Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
         });
 
@@ -35,7 +40,7 @@ public class SettingsActivity extends AppCompatActivity {
         clearButton.setOnClickListener(v -> {
             new AlertDialog.Builder(this)
                     .setTitle("Attention")
-                    .setMessage("Voulez-vous vraiment supprimer toutes les parties et tous les joueurs ? Cette action est irréversible.")
+                    .setMessage("Voulez-vous vraiment supprimer toutes les données ?")
                     .setPositiveButton("Tout supprimer", (dialog, which) -> {
                         GameDatabase.getInstance(this).clearDatabase();
                         Toast.makeText(this, "Données effacées", Toast.LENGTH_SHORT).show();
@@ -43,5 +48,26 @@ public class SettingsActivity extends AppCompatActivity {
                     .setNegativeButton("Annuler", null)
                     .show();
         });
+    }
+
+    private void showLanguageDialog() {
+        String[] languages = {"Français", "English"};
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.settings_lang_dialog_title)
+                .setItems(languages, (dialog, which) -> {
+                    String langCode = (which == 0) ? "fr" : "en";
+                    setLocale(langCode);
+                })
+                .show();
+    }
+
+    private void setLocale(String langCode) {
+        Locale locale = new Locale(langCode);
+        Locale.setDefault(locale);
+        android.content.res.Resources res = getResources();
+        android.content.res.Configuration config = res.getConfiguration();
+        config.setLocale(locale);
+        res.updateConfiguration(config, res.getDisplayMetrics());
+        recreate();
     }
 }

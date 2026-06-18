@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -87,8 +88,8 @@ public class ManagePlayersActivity extends AppCompatActivity {
 
     private void promptForPhoto(long playerId) {
         new AlertDialog.Builder(this)
-                .setTitle("Ajouter une photo ?")
-                .setMessage("Voulez-vous prendre une photo pour ce joueur maintenant ?")
+                .setTitle("Photo")
+                .setMessage("Prendre une photo pour ce joueur ?")
                 .setPositiveButton("Oui", (dialog, which) -> {
                     playerPendingPhoto = playerId;
                     if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
@@ -97,7 +98,7 @@ public class ManagePlayersActivity extends AppCompatActivity {
                         takePhotoLauncher.launch(null);
                     }
                 })
-                .setNegativeButton("Plus tard", null)
+                .setNegativeButton("Non", null)
                 .show();
     }
 
@@ -116,7 +117,7 @@ public class ManagePlayersActivity extends AppCompatActivity {
             db.updatePlayerPhoto(playerId, file.getAbsolutePath());
             loadPlayers();
         } catch (IOException e) {
-            Toast.makeText(this, "Erreur photo: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            Log.e("ManagePlayers", "Error saving photo", e);
         }
     }
 
@@ -149,7 +150,7 @@ public class ManagePlayersActivity extends AppCompatActivity {
     }
 
     private void showPlayerOptions(GameDatabase.PlayerRecord player) {
-        String[] options = {"Changer Photo", "Modifier Nom", "Supprimer"};
+        String[] options = {"Photo", "Modifier", "Supprimer"};
         new AlertDialog.Builder(this)
                 .setTitle(player.name)
                 .setItems(options, (dialog, which) -> {
@@ -174,7 +175,7 @@ public class ManagePlayersActivity extends AppCompatActivity {
         TextInputEditText input = new TextInputEditText(this);
         input.setText(player.name);
         new AlertDialog.Builder(this)
-                .setTitle("Modifier Nom")
+                .setTitle("Modifier")
                 .setView(input)
                 .setPositiveButton("Enregistrer", (dialog, which) -> {
                     String name = input.getText().toString().trim();

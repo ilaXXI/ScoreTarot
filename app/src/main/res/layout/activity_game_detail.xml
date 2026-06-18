@@ -14,7 +14,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:title="Partie de Tarot" />
+            android:title="@string/app_name" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -70,7 +70,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
-            android:text="Historique des manches"
+            android:text="@string/game_detail_history"
             android:textAppearance="@style/TextAppearance.Material3.LabelLarge" />
 
         <ListView
@@ -88,7 +88,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:padding="12dp"
-            android:text="Nouvelle Manche"
+            android:text="@string/game_detail_new_round"
             app:icon="@android:drawable/ic_input_add" />
 
     </LinearLayout>
