@@ -10,6 +10,7 @@ import android.text.TextUtils;
 import com.example.scoretarot.DatabaseSchemas.GameEntry;
 import com.example.scoretarot.DatabaseSchemas.PlayerEntry;
 import com.example.scoretarot.DatabaseSchemas.GamePlayerEntry;
+import com.example.scoretarot.DatabaseSchemas.RoundEntry;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,24 +37,15 @@ public class GameDatabase extends SQLiteOpenHelper {
 		db.execSQL(DatabaseSchemas.SQL_CREATE_GAME_TABLE);
 		db.execSQL(DatabaseSchemas.SQL_CREATE_PLAYER_TABLE);
 		db.execSQL(DatabaseSchemas.SQL_CREATE_GAME_PLAYER_TABLE);
-		db.execSQL("CREATE TABLE rounds (" +
-				"_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-				"game_id INTEGER NOT NULL, " +
-				"taker_id INTEGER NOT NULL, " +
-				"partner_id INTEGER, " +
-				"contract TEXT NOT NULL, " +
-				"bouts INTEGER NOT NULL, " +
-				"points REAL NOT NULL, " +
-				"bonuses TEXT, " +
-				"score INTEGER NOT NULL)");
+		db.execSQL(DatabaseSchemas.SQL_CREATE_ROUND_TABLE);
 	}
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+		db.execSQL(DatabaseSchemas.SQL_DELETE_ROUND_TABLE);
 		db.execSQL(DatabaseSchemas.SQL_DELETE_GAME_PLAYER_TABLE);
 		db.execSQL(DatabaseSchemas.SQL_DELETE_PLAYER_TABLE);
 		db.execSQL(DatabaseSchemas.SQL_DELETE_GAME_TABLE);
-		db.execSQL("DROP TABLE IF EXISTS rounds");
 		onCreate(db);
 	}
 
@@ -76,7 +68,7 @@ public class GameDatabase extends SQLiteOpenHelper {
 		SQLiteDatabase db = getWritableDatabase();
 		db.delete(GameEntry.TABLE_NAME, GameEntry._ID + " = ?", new String[]{String.valueOf(gameId)});
 		db.delete(GamePlayerEntry.TABLE_NAME, GamePlayerEntry.COLUMN_GAME_ID + " = ?", new String[]{String.valueOf(gameId)});
-		db.delete("rounds", "game_id = ?", new String[]{String.valueOf(gameId)});
+		db.delete(RoundEntry.TABLE_NAME, RoundEntry.COLUMN_GAME_ID + " = ?", new String[]{String.valueOf(gameId)});
 	}
 
 	public long insertPlayer(String name, String photoPath) {
@@ -115,31 +107,31 @@ public class GameDatabase extends SQLiteOpenHelper {
 
 	public long insertRound(long gameId, long takerId, Long partnerId, String contract, int bouts, double points, String bonuses, int score) {
 		ContentValues values = new ContentValues();
-		values.put("game_id", gameId);
-		values.put("taker_id", takerId);
-		if (partnerId != null) values.put("partner_id", partnerId);
-		values.put("contract", contract);
-		values.put("bouts", bouts);
-		values.put("points", points);
-		values.put("bonuses", bonuses);
-		values.put("score", score);
-		return getWritableDatabase().insert("rounds", null, values);
+		values.put(RoundEntry.COLUMN_GAME_ID, gameId);
+		values.put(RoundEntry.COLUMN_TAKER_ID, takerId);
+		if (partnerId != null) values.put(RoundEntry.COLUMN_PARTNER_ID, partnerId);
+		values.put(RoundEntry.COLUMN_CONTRACT, contract);
+		values.put(RoundEntry.COLUMN_BOUTS, bouts);
+		values.put(RoundEntry.COLUMN_POINTS, points);
+		values.put(RoundEntry.COLUMN_BONUSES, bonuses);
+		values.put(RoundEntry.COLUMN_SCORE, score);
+		return getWritableDatabase().insert(RoundEntry.TABLE_NAME, null, values);
 	}
 
 	public List<RoundRecord> getRoundsForGame(long gameId) {
 		List<RoundRecord> rounds = new ArrayList<>();
-		Cursor c = getReadableDatabase().query("rounds", null, "game_id = ?", new String[]{String.valueOf(gameId)}, null, null, "_id ASC");
+		Cursor c = getReadableDatabase().query(RoundEntry.TABLE_NAME, null, RoundEntry.COLUMN_GAME_ID + " = ?", new String[]{String.valueOf(gameId)}, null, null, RoundEntry._ID + " ASC");
 		while (c.moveToNext()) {
 			rounds.add(new RoundRecord(
-					c.getLong(c.getColumnIndexOrThrow("_id")),
-					c.getLong(c.getColumnIndexOrThrow("game_id")),
-					c.getLong(c.getColumnIndexOrThrow("taker_id")),
-					c.isNull(c.getColumnIndexOrThrow("partner_id")) ? null : c.getLong(c.getColumnIndexOrThrow("partner_id")),
-					c.getString(c.getColumnIndexOrThrow("contract")),
-					c.getInt(c.getColumnIndexOrThrow("bouts")),
-					c.getDouble(c.getColumnIndexOrThrow("points")),
-					c.getString(c.getColumnIndexOrThrow("bonuses")),
-					c.getInt(c.getColumnIndexOrThrow("score"))
+					c.getLong(c.getColumnIndexOrThrow(RoundEntry._ID)),
+					c.getLong(c.getColumnIndexOrThrow(RoundEntry.COLUMN_GAME_ID)),
+					c.getLong(c.getColumnIndexOrThrow(RoundEntry.COLUMN_TAKER_ID)),
+					c.isNull(c.getColumnIndexOrThrow(RoundEntry.COLUMN_PARTNER_ID)) ? null : c.getLong(c.getColumnIndexOrThrow(RoundEntry.COLUMN_PARTNER_ID)),
+					c.getString(c.getColumnIndexOrThrow(RoundEntry.COLUMN_CONTRACT)),
+					c.getInt(c.getColumnIndexOrThrow(RoundEntry.COLUMN_BOUTS)),
+					c.getDouble(c.getColumnIndexOrThrow(RoundEntry.COLUMN_POINTS)),
+					c.getString(c.getColumnIndexOrThrow(RoundEntry.COLUMN_BONUSES)),
+					c.getInt(c.getColumnIndexOrThrow(RoundEntry.COLUMN_SCORE))
 			));
 		}
 		c.close();
@@ -147,19 +139,19 @@ public class GameDatabase extends SQLiteOpenHelper {
 	}
 
     public RoundRecord getRound(long roundId) {
-        Cursor c = getReadableDatabase().query("rounds", null, "_id = ?", new String[]{String.valueOf(roundId)}, null, null, null);
+        Cursor c = getReadableDatabase().query(RoundEntry.TABLE_NAME, null, RoundEntry._ID + " = ?", new String[]{String.valueOf(roundId)}, null, null, null);
         try {
             if (c.moveToFirst()) {
                 return new RoundRecord(
-                        c.getLong(c.getColumnIndexOrThrow("_id")),
-                        c.getLong(c.getColumnIndexOrThrow("game_id")),
-                        c.getLong(c.getColumnIndexOrThrow("taker_id")),
-                        c.isNull(c.getColumnIndexOrThrow("partner_id")) ? null : c.getLong(c.getColumnIndexOrThrow("partner_id")),
-                        c.getString(c.getColumnIndexOrThrow("contract")),
-                        c.getInt(c.getColumnIndexOrThrow("bouts")),
-                        c.getDouble(c.getColumnIndexOrThrow("points")),
-                        c.getString(c.getColumnIndexOrThrow("bonuses")),
-                        c.getInt(c.getColumnIndexOrThrow("score"))
+                        c.getLong(c.getColumnIndexOrThrow(RoundEntry._ID)),
+                        c.getLong(c.getColumnIndexOrThrow(RoundEntry.COLUMN_GAME_ID)),
+                        c.getLong(c.getColumnIndexOrThrow(RoundEntry.COLUMN_TAKER_ID)),
+                        c.isNull(c.getColumnIndexOrThrow(RoundEntry.COLUMN_PARTNER_ID)) ? null : c.getLong(c.getColumnIndexOrThrow(RoundEntry.COLUMN_PARTNER_ID)),
+                        c.getString(c.getColumnIndexOrThrow(RoundEntry.COLUMN_CONTRACT)),
+                        c.getInt(c.getColumnIndexOrThrow(RoundEntry.COLUMN_BOUTS)),
+                        c.getDouble(c.getColumnIndexOrThrow(RoundEntry.COLUMN_POINTS)),
+                        c.getString(c.getColumnIndexOrThrow(RoundEntry.COLUMN_BONUSES)),
+                        c.getInt(c.getColumnIndexOrThrow(RoundEntry.COLUMN_SCORE))
                 );
             }
             return null;
@@ -238,7 +230,7 @@ public class GameDatabase extends SQLiteOpenHelper {
 
 	public void clearDatabase() {
 		SQLiteDatabase db = getWritableDatabase();
-		db.execSQL("DELETE FROM rounds");
+		db.execSQL("DELETE FROM " + RoundEntry.TABLE_NAME);
 		db.execSQL("DELETE FROM " + GamePlayerEntry.TABLE_NAME);
 		db.execSQL("DELETE FROM " + PlayerEntry.TABLE_NAME);
 		db.execSQL("DELETE FROM " + GameEntry.TABLE_NAME);

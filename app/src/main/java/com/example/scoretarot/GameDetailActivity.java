@@ -84,9 +84,9 @@ public class GameDetailActivity extends AppCompatActivity {
         TextView infoText = findViewById(R.id.text_detail_info);
         LinearLayout scoresContainer = findViewById(R.id.container_player_scores);
 
-        nameText.setText(game.name != null ? game.name : "Partie #" + game.id);
+        nameText.setText(game.name != null ? game.name : getString(R.string.game_number, game.id));
         SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault());
-        infoText.setText(df.format(game.createdAt) + " - " + (game.address != null ? game.address : "Lieu inconnu"));
+        infoText.setText(df.format(game.createdAt) + " - " + (game.address != null ? game.address : getString(R.string.unknown_location)));
 
         scoresContainer.removeAllViews();
         List<GameDatabase.PlayerRecord> players = db.getPlayersForGame(gameId);
@@ -113,17 +113,17 @@ public class GameDetailActivity extends AppCompatActivity {
 
     private void showRoundDetail(GameDatabase.RoundRecord r) {
         GameDatabase.PlayerRecord taker = db.getPlayer(r.takerId);
-        String msg = "Preneur : " + (taker != null ? taker.name : "?") + "\n" +
-                "Contrat : " + r.contract + "\n" +
-                "Bouts : " + r.bouts + "\n" +
-                "Points faits : " + r.points + " (Cible: " + TarotUtils.calculateContractThreshold(r.bouts) + ")\n" +
-                "Bonus : " + (r.bonuses == null || r.bonuses.isEmpty() ? "Aucun" : r.bonuses) + "\n" +
-                "Score : " + (r.score >= 0 ? "+" : "") + r.score;
+        String msg = getString(R.string.round_detail_taker, (taker != null ? taker.name : "?")) + "\n" +
+                getString(R.string.round_detail_contract, r.contract) + "\n" +
+                getString(R.string.round_detail_bouts, r.bouts) + "\n" +
+                getString(R.string.round_detail_points, r.points, TarotUtils.calculateContractThreshold(r.bouts)) + "\n" +
+                getString(R.string.round_detail_bonus, (r.bonuses == null || r.bonuses.isEmpty() ? getString(R.string.none) : r.bonuses)) + "\n" +
+                getString(R.string.round_detail_score, r.score);
 
         new AlertDialog.Builder(this)
-                .setTitle("Détails de la manche")
+                .setTitle(R.string.round_details_title)
                 .setMessage(msg)
-                .setPositiveButton("OK", null)
+                .setPositiveButton(android.R.string.ok, null)
                 .show();
     }
 
@@ -147,7 +147,7 @@ public class GameDetailActivity extends AppCompatActivity {
             num.setText(String.valueOf(position + 1));
             contract.setText(r.contract);
             GameDatabase.PlayerRecord takerP = db.getPlayer(r.takerId);
-            taker.setText("Pris par " + (takerP != null ? takerP.name : "?"));
+            taker.setText(getString(R.string.taken_by, (takerP != null ? takerP.name : "?")));
             score.setText((r.score >= 0 ? "+" : "") + r.score);
             score.setTextColor(r.score >= 0 ? 0xFF4CAF50 : 0xFFE91E63);
 

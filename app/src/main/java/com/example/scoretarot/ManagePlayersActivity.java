@@ -88,9 +88,9 @@ public class ManagePlayersActivity extends AppCompatActivity {
 
     private void promptForPhoto(long playerId) {
         new AlertDialog.Builder(this)
-                .setTitle("Photo")
-                .setMessage("Prendre une photo pour ce joueur ?")
-                .setPositiveButton("Oui", (dialog, which) -> {
+                .setTitle(R.string.photo)
+                .setMessage(R.string.dialog_photo_message)
+                .setPositiveButton(R.string.yes, (dialog, which) -> {
                     playerPendingPhoto = playerId;
                     if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
                         cameraPermissionLauncher.launch(Manifest.permission.CAMERA);
@@ -98,7 +98,7 @@ public class ManagePlayersActivity extends AppCompatActivity {
                         takePhotoLauncher.launch(null);
                     }
                 })
-                .setNegativeButton("Non", null)
+                .setNegativeButton(R.string.no, null)
                 .show();
     }
 
@@ -150,7 +150,7 @@ public class ManagePlayersActivity extends AppCompatActivity {
     }
 
     private void showPlayerOptions(GameDatabase.PlayerRecord player) {
-        String[] options = {"Photo", "Modifier", "Supprimer"};
+        String[] options = {getString(R.string.photo), getString(R.string.action_edit), getString(R.string.action_delete)};
         new AlertDialog.Builder(this)
                 .setTitle(player.name)
                 .setItems(options, (dialog, which) -> {
@@ -175,16 +175,16 @@ public class ManagePlayersActivity extends AppCompatActivity {
         TextInputEditText input = new TextInputEditText(this);
         input.setText(player.name);
         new AlertDialog.Builder(this)
-                .setTitle("Modifier")
+                .setTitle(R.string.action_edit)
                 .setView(input)
-                .setPositiveButton("Enregistrer", (dialog, which) -> {
+                .setPositiveButton(R.string.save, (dialog, which) -> {
                     String name = input.getText().toString().trim();
                     if (!name.isEmpty()) {
                         db.updatePlayer(player.id, name, player.photoPath);
                         loadPlayers();
                     }
                 })
-                .setNegativeButton("Annuler", null)
+                .setNegativeButton(android.R.string.cancel, null)
                 .show();
     }
 }

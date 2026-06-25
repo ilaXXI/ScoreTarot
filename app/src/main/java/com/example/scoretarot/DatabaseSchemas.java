@@ -28,6 +28,18 @@ public final class DatabaseSchemas {
         public static final String COLUMN_PLAYER_ID = "player_id";
     }
 
+    public static final class RoundEntry implements BaseColumns {
+        public static final String TABLE_NAME = "rounds";
+        public static final String COLUMN_GAME_ID = "game_id";
+        public static final String COLUMN_TAKER_ID = "taker_id";
+        public static final String COLUMN_PARTNER_ID = "partner_id";
+        public static final String COLUMN_CONTRACT = "contract";
+        public static final String COLUMN_BOUTS = "bouts";
+        public static final String COLUMN_POINTS = "points";
+        public static final String COLUMN_BONUSES = "bonuses";
+        public static final String COLUMN_SCORE = "score";
+    }
+
     public static final String SQL_CREATE_GAME_TABLE =
             "CREATE TABLE " + GameEntry.TABLE_NAME + " (" +
                     GameEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -53,6 +65,19 @@ public final class DatabaseSchemas {
                     "FOREIGN KEY(" + GamePlayerEntry.COLUMN_GAME_ID + ") REFERENCES " + GameEntry.TABLE_NAME + "(" + GameEntry._ID + "), " +
                     "FOREIGN KEY(" + GamePlayerEntry.COLUMN_PLAYER_ID + ") REFERENCES " + PlayerEntry.TABLE_NAME + "(" + PlayerEntry._ID + "))";
 
+    public static final String SQL_CREATE_ROUND_TABLE =
+            "CREATE TABLE " + RoundEntry.TABLE_NAME + " (" +
+                    RoundEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    RoundEntry.COLUMN_GAME_ID + " INTEGER NOT NULL, " +
+                    RoundEntry.COLUMN_TAKER_ID + " INTEGER NOT NULL, " +
+                    RoundEntry.COLUMN_PARTNER_ID + " INTEGER, " +
+                    RoundEntry.COLUMN_CONTRACT + " TEXT NOT NULL, " +
+                    RoundEntry.COLUMN_BOUTS + " INTEGER NOT NULL, " +
+                    RoundEntry.COLUMN_POINTS + " REAL NOT NULL, " +
+                    RoundEntry.COLUMN_BONUSES + " TEXT, " +
+                    RoundEntry.COLUMN_SCORE + " INTEGER NOT NULL, " +
+                    "FOREIGN KEY(" + RoundEntry.COLUMN_GAME_ID + ") REFERENCES " + GameEntry.TABLE_NAME + "(" + GameEntry._ID + "))";
+
     public static final String SQL_DELETE_GAME_TABLE =
             "DROP TABLE IF EXISTS " + GameEntry.TABLE_NAME;
 
@@ -61,4 +86,7 @@ public final class DatabaseSchemas {
 
     public static final String SQL_DELETE_GAME_PLAYER_TABLE =
             "DROP TABLE IF EXISTS " + GamePlayerEntry.TABLE_NAME;
+
+    public static final String SQL_DELETE_ROUND_TABLE =
+            "DROP TABLE IF EXISTS " + RoundEntry.TABLE_NAME;
 }

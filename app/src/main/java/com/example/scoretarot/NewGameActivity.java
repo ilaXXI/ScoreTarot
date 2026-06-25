@@ -108,7 +108,7 @@ public class NewGameActivity extends AppCompatActivity {
                 }
             } catch (IOException ignored) {
             }
-            String finalAddressText = addressText == null ? "Adresse inconnue" : addressText;
+            String finalAddressText = addressText == null ? getString(R.string.unknown_address) : addressText;
             currentAddress = finalAddressText;
             runOnUiThread(this::refreshLocationText);
         }).start();
@@ -119,7 +119,7 @@ public class NewGameActivity extends AppCompatActivity {
             locationText.setText(R.string.new_game_no_location);
             return;
         }
-        locationText.setText(getString(R.string.new_game_location_format, currentLatitude, currentLongitude, currentAddress == null ? "Adresse inconnue" : currentAddress));
+        locationText.setText(getString(R.string.new_game_location_format, currentLatitude, currentLongitude, currentAddress == null ? getString(R.string.unknown_address) : currentAddress));
     }
 
     private void createGame() {

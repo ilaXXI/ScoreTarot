@@ -1,5 +1,6 @@
 package com.example.scoretarot;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
@@ -39,13 +40,13 @@ public class SettingsActivity extends AppCompatActivity {
         Button clearButton = findViewById(R.id.button_clear_data);
         clearButton.setOnClickListener(v -> {
             new AlertDialog.Builder(this)
-                    .setTitle("Attention")
-                    .setMessage("Voulez-vous vraiment supprimer toutes les données ?")
-                    .setPositiveButton("Tout supprimer", (dialog, which) -> {
+                    .setTitle(R.string.clear_data_title)
+                    .setMessage(R.string.clear_data_message)
+                    .setPositiveButton(R.string.clear_data_positive, (dialog, which) -> {
                         GameDatabase.getInstance(this).clearDatabase();
-                        Toast.makeText(this, "Données effacées", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, R.string.clear_data_success, Toast.LENGTH_SHORT).show();
                     })
-                    .setNegativeButton("Annuler", null)
+                    .setNegativeButton(R.string.cancel, null)
                     .show();
         });
     }
@@ -68,6 +69,11 @@ public class SettingsActivity extends AppCompatActivity {
         android.content.res.Configuration config = res.getConfiguration();
         config.setLocale(locale);
         res.updateConfiguration(config, res.getDisplayMetrics());
-        recreate();
+
+        // Redémarrer l'application pour appliquer les changements partout
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
     }
 }

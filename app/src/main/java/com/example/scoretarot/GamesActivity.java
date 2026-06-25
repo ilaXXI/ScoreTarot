@@ -61,14 +61,14 @@ public class GamesActivity extends AppCompatActivity {
     }
 
     private void showGameOptions(GameDatabase.GameRecord game) {
-        String[] options = {"Supprimer la partie"};
+        String[] options = {getString(R.string.action_delete)};
         new AlertDialog.Builder(this)
-                .setTitle(game.name != null ? game.name : "Partie #" + game.id)
+                .setTitle(game.name != null ? game.name : getString(R.string.game_number, game.id))
                 .setItems(options, (dialog, which) -> {
                     if (which == 0) {
                         db.deleteGame(game.id);
                         loadGames();
-                        Toast.makeText(this, "Partie supprimée", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, R.string.game_deleted, Toast.LENGTH_SHORT).show();
                     }
                 })
                 .show();
@@ -104,8 +104,8 @@ public class GamesActivity extends AppCompatActivity {
             TextView scoresText = convertView.findViewById(R.id.text_game_scores);
 
             SimpleDateFormat df = new SimpleDateFormat("dd/MM/yy HH:mm", Locale.getDefault());
-            dateText.setText(game.name != null ? game.name : "Partie du " + df.format(game.createdAt));
-            detailsText.setText(game.playerCount + " joueurs - " + (game.address != null ? game.address : "Lieu inconnu"));
+            dateText.setText(game.name != null ? game.name : getString(R.string.game_name_date, df.format(game.createdAt)));
+            detailsText.setText(getString(R.string.players_game_format, game.id, game.playerCount) + " - " + (game.address != null ? game.address : getString(R.string.unknown_location)));
 
             List<GameDatabase.PlayerRecord> players = db.getPlayersForGame(game.id);
             StringBuilder sb = new StringBuilder();
